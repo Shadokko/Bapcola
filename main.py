@@ -1,38 +1,38 @@
-# This is a sample Python script.
 
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from tkinter import Canvas
+# importing packages
+import tkinter
+import ruamel.yaml as yaml
+from bapcola_package import utils, classes
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Salut, {name} !')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('Bapcola')
 
-    from tkinter import *
-    from PIL import Image, ImageTk
-    from pathlib2 import Path
-    from bapcola_package import utils
+    # parsing parameters
+    path2yaml = 'parameters.yml'
+    yaml_file = open(path2yaml, 'r')
+    yaml_content = yaml.load(yaml_file, Loader=yaml.Loader)
+    print("Key: Value")
+    for key, value in yaml_content.items():
+        print(f"{key}: {value}")
+        if type(value) is str:
+            exec('{} = "{}"'.format(key, value))
+        else:
+            exec('{} = {}'.format(key, value))
 
-    # initializing parameters
-    utils.parse_yaml('parameters.yml')
+    fenetre = tkinter.Tk()
 
-    fenetre = Tk()
-
-    label = Label(fenetre, text="MON JEU PACMAN")
+    label = tkinter.Label(fenetre, text="MON JEU PACMAN")
     label.pack()
 
-    canvas = Canvas(fenetre, width=canvas_width, height=canvas_heigth, background='blue')
+    canvas = tkinter.Canvas(fenetre, width=canvas_width, height=canvas_heigth, background='blue')
 
-    path2image = Path('C:/Users/nfaur/Documents/Bapcola') / 'Pacman.png'
-    mon_image =  Image.open(str(path2image)).resize((100,100))
-    mon_image_tk = ImageTk.PhotoImage(mon_image)
-    canvas.create_image(canvas_width // 2,canvas_heigth // 2, image=mon_image_tk)
+    # On crée l'object pacman
+    pacman = classes.pacman(canvas, path2data, position=(canvas_width // 2, canvas_heigth // 2))
+
+    # On passe les saisies clavier vers l'object Pacman
+    canvas.focus_set()
+    # canvas.bind("<Key>", pacman.print_input_key)
+    canvas.bind("<Key>", pacman.behavior_on_key)
+
     canvas.pack()
 
     fenetre.mainloop()

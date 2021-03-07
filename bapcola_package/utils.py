@@ -1,5 +1,14 @@
 import ruamel.yaml as yaml
 
+def print_hi(name):
+    # Use a breakpoint in the code line below to debug your script.
+    print(f'Salut, {name} !')  # Press Ctrl+F8 to toggle the breakpoint.
+
+def clavier(event: object):
+    touche = event.keysym
+    print(touche)
+
+
 def parse_yaml(path2yaml='parameters.yml'):
     """a utility function to generate variables from a .yml file in format
     :param path2yaml: an absolute or relative path to a .yml file
